@@ -1,0 +1,11 @@
+FreeCAD Bridge
+Copyright (c) 2026 Yruam Kaffer de Faria
+
+Licensor: Yruam Kaffer de Faria
+License: PolyForm Noncommercial License 1.0.0 (LICENSE.txt).
+Permite uso, cópia e modificações nos limites não comerciais da licença.
+Não é uma licença de código aberto com uso comercial permitido.
+
+FreeCAD e SketchUp são dependências externas, não incluídas no pacote,
+e mantêm suas próprias licenças e marcas.
+Este programa não é afiliado nem certificado pelos respectivos fabricantes.
