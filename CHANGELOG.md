@@ -1,5 +1,16 @@
 # Histórico
 
+## 0.4.0 — 2026-10-20
+
+- Barra de ferramentas FreeCAD Bridge com cinco atalhos e ícones próprios de 24/32 pixels.
+- Comandos compartilhados com o menu Extensões, dicas e texto de ajuda.
+- Restauração nativa da posição/visibilidade e comando para reexibir a barra.
+- Importações indisponíveis durante conversão em andamento.
+- Guias atualizados, exemplo JSON sintético e empacotamento com validação dos ícones.
+- Conversor e reconstrução geométrica mantidos da 0.3.0; sem novas correções de malha.
+
+Sintaxe, recursos, testes isolados e pacote verificados. Interface real ainda precisa de validação no SketchUp. Sem assinatura oficial.
+
 ## 0.3.0 — 2026-10-08
 
 - Nome FreeCAD Bridge, autoria de Yruam Kaffer de Faria e PolyForm Noncommercial 1.0.0.

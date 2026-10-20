@@ -9,17 +9,22 @@ Use Python 3.10 ou mais recente para as ferramentas do repositório. Nenhuma bib
 ```sh
 python -m unittest discover -s tests -v
 python tools/build_release.py
+python tools/build_release.py --check
 ```
 
-O build extrai a versão de `yk_step_bridge.rb`, verifica a presença dos arquivos necessários, confere sintaxe Python e igualdade das cópias de licença/avisos. Gera `dist/FreeCAD_Bridge_<versão>.rbz` e `dist/SHA256.txt`, usando somente arquivos explicitamente selecionados. Não inclui modelos, caches, configuração de usuário ou documentação no RBZ.
+O build extrai a versão de `yk_step_bridge.rb`, verifica a presença dos arquivos necessários, confere sintaxe Python e igualdade das cópias de licença/avisos. Gera `dist/FreeCAD_Bridge_<versão>.rbz` e `dist/SHA256.txt`, usando somente arquivos explicitamente selecionados. Inclui os cinco SVGs originais, dez PNGs de 24/32 pixels e AJUDA.txt. Não inclui modelos, caches, configuração de usuário ou os guias do repositório no RBZ.
 
 Datas e permissões de entradas ZIP são fixadas para reduzir variação no empacotamento. O mesmo ambiente e os mesmos bytes de origem devem gerar a mesma saída; diferenças entre implementações de compressão ainda podem afetar o hash. O build não assina o instalador e não verifica sintaxe Ruby.
+
+O modo `--check` confere o instalador atual contra todos os arquivos de origem e seu hash sem reempacotar. O build normal atualiza os hashes de todos os RBZ presentes em dist/. A geração de ícones não é necessária para usar ou empacotar o projeto: os recursos finais e SVGs editáveis estão versionados.
 
 ## Cobertura dos testes
 
 Os testes verificam RGB inválido, associação ambígua, associação de cores independente da orientação, triângulo sem correspondência, tetraedro fechado com face repetida/invertida e tetraedro aberto. Usam geometrias e objetos mínimos; não carregam FreeCAD, Open CASCADE ou SketchUp.
 
 Para mudanças Ruby, rode `ruby -c yk_step_bridge.rb` e `ruby -c yk_step_bridge/main.rb` quando houver Ruby instalado. Mesmo assim, valide no SketchUp: a sintaxe não verifica disponibilidade ou comportamento das APIs.
+
+Os testes de distribuição também conferem o conjunto/bytes do instalador, dimensões dos PNGs, links locais Markdown e fechamento/volume do exemplo sintético. Eles não simulam a barra nativa.
 
 ## Validação nos aplicativos
 

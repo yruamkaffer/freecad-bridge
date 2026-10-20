@@ -31,3 +31,7 @@ Não remova rejeição de metadados ambíguos apenas para reduzir avisos. Altera
 | Geometria inválida | Rejeição Estrito e avisos Visualização. |
 | Importar dentro de componente | Contexto e Localizar. |
 | Falha de conversão | Mensagem e liberação para novo trabalho. |
+
+## Alterações de interface
+
+Confira os cinco ícones em tamanhos pequeno/grande, títulos, dicas e comandos equivalentes no menu. Teste primeira exibição, barra oculta, reabertura pelo menu, reinício e posição encaixada/flutuante. Durante conversão, STEP/JSON devem ficar indisponíveis e voltar depois da conclusão ou erro. Não registre como teste de interface uma simples verificação de arquivos PNG.

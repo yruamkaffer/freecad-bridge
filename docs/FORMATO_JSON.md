@@ -1,6 +1,6 @@
 # Formato intermediário JSON
 
-Identificador `yk-step-bridge-1`, unidades `mm`. Formato próprio, não oficial do FreeCAD/SketchUp. Descreve 0.3.0, sem promessa de estabilidade diante de mudanças incompatíveis.
+Identificador `yk-step-bridge-1`, unidades `mm`. Formato próprio, não oficial do FreeCAD/SketchUp. Descreve 0.4.0, sem promessa de estabilidade diante de mudanças incompatíveis.
 
 ## Exemplo mínimo
 
@@ -42,3 +42,7 @@ Tetraedro fechado com cor uniforme:
 O Ruby valida coordenadas, índices, RGB e tamanho da lista de cores. Esses controles não substituem esquema completo ou validade geométrica. Indicadores de origem não substituem `manifold?`.
 
 `job.json` contém `source`, `output`, `tolerance`, `allow_open` e `repair`. Caminhos locais, tolerância em mm; `allow_open` corresponde a Visualização. `YK_STEP_JOB` fornece o caminho do trabalho. Um Python comum não executa a conversão: são necessários os módulos do FreeCAD.
+
+## Compatibilidade 0.4.0
+
+A barra JSON usa o mesmo `import_json` da 0.3.0. Não houve mudança no identificador ou nas unidades. Um JSON aceito pelo parser ainda pode falhar na criação de faces; Visualização não garante que o SketchUp consiga reconstruir toda malha inválida. Exemplo público: [tetraedro vermelho](../examples/tetraedro_vermelho.json).

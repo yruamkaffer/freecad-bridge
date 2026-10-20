@@ -1,5 +1,11 @@
 # Importação, cores e validação
 
+## Acesso rápido
+
+Use a barra FreeCAD Bridge ou os comandos equivalentes em Extensões. STEP inicia conversão; JSON importa uma conversão existente. Os dois atalhos ficam indisponíveis enquanto houver conversão em andamento. Veja [barra de ferramentas](BARRA_DE_FERRAMENTAS.md).
+
+Para conferir instalação sem converter STEP, abra [o exemplo sintético](../examples/tetraedro_vermelho.json) pelo ícone JSON. O teste de exemplo não comprova a validade de arquivos CAD externos.
+
 ## Preparar no FreeCAD
 
 1. Confira que cada peça a importar resulta em pelo menos um sólido.

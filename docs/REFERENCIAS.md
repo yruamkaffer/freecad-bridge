@@ -1,6 +1,6 @@
 # Referências oficiais
 
-Consultadas em 8 de outubro de 2026. APIs podem mudar.
+Consultadas em 20 de outubro de 2026. APIs podem mudar.
 
 - [SketchUp Ruby API](https://ruby.sketchup.com/): componentes, faces, materiais e diálogos.
 - [SketchupExtension](https://ruby.sketchup.com/SketchupExtension.html): registro e metadados.
@@ -11,3 +11,6 @@ Consultadas em 8 de outubro de 2026. APIs podem mudar.
 - [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases): código da tag e assets.
 
 Referências não indicam parceria ou certificação.
+
+- [UI::Toolbar](https://ruby.sketchup.com/UI/Toolbar.html): barra nativa, estado e restauração.
+- [UI::Command](https://ruby.sketchup.com/UI/Command.html): comandos, ícones e dicas compartilhadas.

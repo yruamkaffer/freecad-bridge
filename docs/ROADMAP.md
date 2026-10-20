@@ -2,8 +2,15 @@
 
 Prioridades propostas, sem compromisso de prazo.
 
+## Entregue na 0.4.0
+
+- Barra nativa com cinco atalhos e ícones próprios.
+- Dicas, restauração nativa e comando para mostrar a barra.
+- Documentação da interface e exemplo JSON sintético.
+
 ## Validação
 
+- Validar encaixe, restauração e disponibilidade de comandos no SketchUp.
 - Validar cores uniformes e por face no FreeCAD 1.1 / SketchUp 2026.
 - Registrar matriz de versões e casos reais.
 - Criar exemplos públicos com autorização clara.

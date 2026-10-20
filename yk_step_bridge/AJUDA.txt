@@ -1,0 +1,28 @@
+FreeCAD Bridge 0.4.0 — Barra de ferramentas
+Autor: Yruam Kaffer de Faria. PolyForm Noncommercial 1.0.0.
+
+Instale o RBZ no Gerenciador de Extensões e reinicie o SketchUp.
+A barra FreeCAD Bridge aparece na primeira utilização.
+Arraste-a para encaixar nas bordas ou manter flutuante.
+A API nativa do SketchUp restaura posição e visibilidade posteriores.
+Se estiver oculta, use Extensões > FreeCAD Bridge > Mostrar barra de ferramentas.
+No Windows também pode ser habilitada na lista de barras de ferramentas.
+
+Ícones, da esquerda para a direita:
+1. STEP: selecionar arquivo e importar com FreeCADCmd.
+2. JSON: importar geometria já convertida.
+3. Engrenagem: configurar FreeCADCmd.exe.
+4. Diagnóstico: conferir versão e caminhos da configuração.
+5. Informação: autoria e licença.
+Os comandos também continuam disponíveis no menu Extensões.
+Os dois comandos de importação ficam indisponíveis durante conversão em andamento.
+
+Esta atualização é baseada na versão 0.3.0 e altera interface e metadados de
+versão. O conversor Python e a criação de geometria não foram modificados.
+Os problemas de conversão de determinados modelos não são corrigidos por
+esta atualização de interface. A versão 0.3.1 de diagnóstico não é a base.
+
+Validação: sintaxe Ruby/Python, arquivos dos ícones, igualdade do conversor
+e integridade do pacote verificadas. Interface real, encaixe e restauração
+precisam ser conferidos no SketchUp 2026 Windows, indisponível neste ambiente.
+RBZ sem assinatura oficial, conforme solicitado.

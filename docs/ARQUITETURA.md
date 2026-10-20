@@ -44,3 +44,11 @@ Associação usa volume, caixa envolvente e centro de massa: volume com tolerân
 Cor uniforme exige confirmação em todas as faces. Cores por face usam chaves de triângulos com coordenadas arredondadas a seis casas. Triângulos sem correspondência ficam sem cor confirmada. Reparo e triangulação alternativa podem reduzir a cobertura.
 
 Ruby roda no SketchUp e Python no FreeCAD; não empacotamos os aplicativos nem seu kernel CAD. Ferramentas de build/testes usam Python padrão separado. APIs podem mudar com versões; o alvo documentado não significa compatibilidade universal.
+
+## Interface 0.4.0
+
+`register_interface` cria cinco `UI::Command`, armazena-os em `@commands` e compartilha os objetos entre o submenu e `@toolbar`. `toolbar_command` define título, tooltip, texto de status e caminhos de ícones. `show_about` concentra versão, autoria e licença.
+
+A inicialização segue o estado nativo: primeira exibição chama `show`; sessões seguintes usam `restore`. O comando Mostrar barra permite recuperá-la. A guarda `file_loaded?` evita duplicação no carregamento normal. Os comandos STEP/JSON usam validation proc que retorna MF_GRAYED enquanto `@job` existe.
+
+Esta versão altera apenas registro da interface e metadados de versão. `convert.py`, `mesh_tools.py`, `metadata.py` e os métodos de reconstrução foram preservados da versão 0.3.0.

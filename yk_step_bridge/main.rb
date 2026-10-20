@@ -125,7 +125,7 @@ module YKStepBridge
       source_index = data['parts'][i]['source_index'] || i + 1
       "<tr><td>#{source_index}</td><td>#{escape.call(component.name)}</td><td>#{component.manifold? ? 'Sólido' : 'Verificar'}</td><td><button onclick='sketchup.locate(#{i})'>Localizar</button></td></tr>"
     end.join
-    text_report = "FreeCAD Bridge 0.3.0\nArquivo: #{data['source']}\n" + report.join("\n")
+    text_report = "FreeCAD Bridge 0.4.0\nArquivo: #{data['source']}\n" + report.join("\n")
     html = "<!doctype html><meta charset='utf-8'><style>body{font:15px Arial;padding:20px;color:#243447}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:9px;border-bottom:1px solid #ddd}button{padding:6px 12px;cursor:pointer}pre{white-space:pre-wrap;font:12px monospace}</style><h2>FreeCAD Bridge</h2><p>#{escape.call(data['source'])} · #{imported.size} componentes · #{imported.count(&:manifold?)} sólidos</p><table><tr><th>Índice STEP</th><th>Componente</th><th>Resultado</th><th></th></tr>#{rows}</table><p><button onclick='sketchup.save_report()'>Salvar relatório</button></p><details><summary>Detalhes da conversão</summary><pre>#{escape.call(text_report)}</pre></details>"
     context = (model.active_path || []).dup
     context << container if container
@@ -189,7 +189,7 @@ module YKStepBridge
 
   def self.diagnostics
     path = saved_executable
-    UI.messagebox("FreeCAD Bridge 0.3.0\nExecutável: #{path}\nExiste: #{File.file?(path)}\nConfiguração: #{config_file}")
+    UI.messagebox("FreeCAD Bridge 0.4.0\nExecutável: #{path}\nExiste: #{File.file?(path)}\nConfiguração: #{config_file}")
   end
 
   def self.import_step
@@ -250,14 +250,52 @@ module YKStepBridge
     end
   end
 
-  unless file_loaded?(__FILE__)
+  # Share the same command objects between the menu and toolbar.
+  def self.toolbar_command(title, icon, help, &action)
+    command = UI::Command.new(title, &action)
+    command.tooltip = title
+    command.status_bar_text = help
+    command.small_icon = File.join(__dir__, 'icons', "#{icon}_24.png")
+    command.large_icon = File.join(__dir__, 'icons', "#{icon}_32.png")
+    command
+  end
+
+  def self.show_about
+    UI.messagebox("FreeCAD Bridge 0.4.0\nYruam Kaffer de Faria\nCopyright © 2026\nPolyForm Noncommercial 1.0.0\nUso e modificações sem fins comerciais, conforme LICENSE.txt.")
+  end
+
+  def self.register_interface
+    @commands = [
+      toolbar_command('Importar STEP automaticamente', 'step', 'Selecionar STEP e converter com o FreeCAD em segundo plano.') { import_step },
+      toolbar_command('Importar geometria FreeCAD (.json)', 'json', 'Importar um JSON compatível já convertido.') { import_json },
+      toolbar_command('Configurar FreeCADCmd', 'settings', 'Selecionar o executável FreeCADCmd.exe usado na conversão.') { configure },
+      toolbar_command('Diagnóstico (0.4.0)', 'diagnostics', 'Conferir versão, caminho do executável e arquivo de configuração.') { diagnostics },
+      toolbar_command('Sobre / licença', 'about', 'Autoria, versão e licença do FreeCAD Bridge.') { show_about }
+    ]
+    @commands.first(2).each do |command|
+      command.set_validation_proc { @job ? MF_GRAYED : MF_ENABLED }
+    end
     menu = UI.menu('Extensions').add_submenu('FreeCAD Bridge')
-    menu.add_item('Importar STEP automaticamente') { import_step }
-    menu.add_item('Configurar FreeCADCmd') { configure }
-    menu.add_item('Diagnóstico (0.3.0)') { diagnostics }
-    menu.add_item('Importar geometria FreeCAD (.json)') { import_json }
-    menu.add_item('Sobre / licença') { UI.messagebox("FreeCAD Bridge 0.3.0\nYruam Kaffer de Faria\nCopyright © 2026\nPolyForm Noncommercial 1.0.0\nUso e modificações sem fins comerciais, conforme LICENSE.txt.") }
-    menu.add_item('Como importar') { UI.messagebox('Configure FreeCADCmd uma vez; depois use Importar STEP automaticamente. Versão 0.3.0.') }
+    @toolbar = UI::Toolbar.new('FreeCAD Bridge')
+    @commands.each_with_index do |command, index|
+      @toolbar.add_separator if index == 2
+      @toolbar.add_item(command)
+      menu.add_item(command)
+    end
+    menu.add_separator
+    menu.add_item('Mostrar barra de ferramentas') { @toolbar.show }
+    menu.add_item('Como importar') do
+      UI.messagebox('Configure FreeCADCmd uma vez; depois use o ícone de STEP. Para arquivos já convertidos, use JSON. Arraste a barra para encaixá-la nas bordas da janela.')
+    end
+    if @toolbar.get_last_state == -1
+      @toolbar.show
+    else
+      @toolbar.restore
+    end
+  end
+
+  unless file_loaded?(__FILE__)
+    register_interface
     file_loaded(__FILE__)
   end
 end
