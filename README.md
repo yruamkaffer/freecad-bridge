@@ -4,7 +4,7 @@
 
 Extensão para SketchUp desktop que utiliza o FreeCAD em segundo plano para importar arquivos STEP. Leve modelos CAD para cenas, vistas, apresentações e renders com peças separadas e geometria editável no SketchUp, sem executar uma macro manualmente a cada importação.
 
-**Autor:** Yruam Kaffer de Faria · **Versão:** 0.4.0 · **Plataforma alvo:** Windows / SketchUp 2026
+**Autor:** Yruam Kaffer de Faria · **Versão:** 0.4.1 · **Plataforma alvo:** Windows / SketchUp 2026
 
 [English](README.en.md) · [Instalação](docs/INSTALACAO.md) · [Uso](docs/USO.md) · [Problemas comuns](docs/SOLUCAO_DE_PROBLEMAS.md) · [Arquitetura](docs/ARQUITETURA.md) · [Licença](LICENSE.txt)
 
@@ -16,7 +16,11 @@ Um modelo sólido no CAD nem sempre chega ao SketchUp como um componente sólido
 
 O FreeCAD precisa estar instalado, mas sua interface não precisa ser aberta para cada importação.
 
-## Novo na versão 0.4.0
+## Novo na versão 0.4.1
+
+O desvio linear agora aceita **0,001 a 100 mm**, mantendo o padrão de **0,05 mm**. Isso permite comparar aproximações mais simplificadas em itens grandes, como banheiras. Valores maiores podem reduzir detalhes e alterar o contorno; o limite angular também influencia a triangulação. A ampliação do intervalo não corrige defeitos de geometria nem substitui suavização.
+
+## Barra de ferramentas — introduzida na 0.4.0
 
 Barra de ferramentas com cinco ícones, dicas de uso e acesso aos mesmos comandos do menu. Pode ficar flutuante ou encaixada e utiliza a restauração nativa de posição/visibilidade do SketchUp.
 
@@ -34,7 +38,7 @@ A imagem mostra os ícones e suas funções; não é uma captura da interface do
 
 A versão 0.4.0 é uma atualização de interface baseada na 0.3.0. Não altera o conversor, o tratamento de cores ou a reconstrução geométrica; problemas de importação anteriores podem continuar ocorrendo. Não inclui alterações de builds privados de diagnóstico.
 
-[Guia da barra de ferramentas](docs/BARRA_DE_FERRAMENTAS.md) · [Notas da versão](docs/RELEASE_0.4.0.md) · [Histórico](CHANGELOG.md)
+[Guia da barra de ferramentas](docs/BARRA_DE_FERRAMENTAS.md) · [Notas da versão](docs/RELEASE_0.4.1.md) · [Histórico](CHANGELOG.md)
 
 ## Recursos
 
@@ -51,7 +55,7 @@ A versão 0.4.0 é uma atualização de interface baseada na 0.3.0. Não altera 
 ## Comece aqui
 
 1. Instale o FreeCAD e localize `FreeCADCmd.exe`, normalmente na pasta `bin` da instalação.
-2. Baixe [FreeCAD_Bridge_0.4.0.rbz](dist/FreeCAD_Bridge_0.4.0.rbz).
+2. Baixe [FreeCAD_Bridge_0.4.1.rbz](dist/FreeCAD_Bridge_0.4.1.rbz).
 3. No SketchUp, use **Extensões → Gerenciador de Extensões → Instalar extensão** e selecione o RBZ.
 4. Reinicie o SketchUp.
 5. Abra **Extensões → FreeCAD Bridge → Configurar FreeCADCmd**.

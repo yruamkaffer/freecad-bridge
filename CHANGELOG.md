@@ -1,5 +1,12 @@
 # Histórico
 
+## 0.4.1 — 2026-10-20
+
+- Desvio linear ampliado de 0,001–5 mm para 0,001–100 mm.
+- Padrão 0,05 mm preservado; intervalo informado no campo e na validação.
+- Barra de ferramentas da 0.4.0 preservada. Conversor e seus limites angulares não alterados.
+- Sintaxe e integridade do pacote verificadas; validação em aplicativos pendente.
+
 ## 0.4.0 — 2026-10-20
 
 - Barra de ferramentas FreeCAD Bridge com cinco atalhos e ícones próprios de 24/32 pixels.

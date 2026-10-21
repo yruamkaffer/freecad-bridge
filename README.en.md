@@ -2,13 +2,17 @@
 
 **STEP to SketchUp, with named components, colors and solid checks.**
 
-By **Yruam Kaffer de Faria** · Version **0.4.0** · Target: **Windows / SketchUp 2026 desktop**
+By **Yruam Kaffer de Faria** · Version **0.4.1** · Target: **Windows / SketchUp 2026 desktop**
 
 [Português — full documentation](README.md)
 
 FreeCAD Bridge uses an installed FreeCAD command-line executable to convert STEP files in the background. It creates a component per solid, attempts geometry repair, removes coplanar subdivisions with matching materials and checks the final components with SketchUp solid detection.
 
-## New in 0.4.0
+## New in 0.4.1
+
+Linear deflection now accepts **0.001 to 100 mm**, keeping the **0.05 mm** default. Larger values allow coarser approximations for large models, but may reduce detail and change the outline. Angular settings also affect tessellation. This range change does not repair geometry or replace edge smoothing.
+
+## Toolbar — introduced in 0.4.0
 
 A dockable/floating toolbar with five actions: STEP import, JSON import, FreeCADCmd setup, diagnostics and project information. Commands are shared with the Extensions menu. Import actions are disabled while a background conversion is running. The native toolbar API restores its previous location and visibility.
 
@@ -21,7 +25,7 @@ This is a UI-only update based on 0.3.0. Conversion and geometry reconstruction 
 ## Install
 
 1. Install FreeCAD and locate `FreeCADCmd.exe`.
-2. Download [FreeCAD_Bridge_0.4.0.rbz](dist/FreeCAD_Bridge_0.4.0.rbz).
+2. Download [FreeCAD_Bridge_0.4.1.rbz](dist/FreeCAD_Bridge_0.4.1.rbz).
 3. Install through SketchUp Extension Manager and restart SketchUp.
 4. Open **Extensions → FreeCAD Bridge → Configurar FreeCADCmd** and select the executable.
 5. Choose **Importar STEP automaticamente**, select a STEP file and start with `0.05 mm` linear deflection.

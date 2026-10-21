@@ -23,7 +23,7 @@ Mantenha o mesmo modelo e contexto de edição durante a conversão. Se mudarem,
 
 ## Qualidade
 
-O desvio linear está em milímetros. Padrão `0,05 mm`; intervalo aceito de `0,001` a `5 mm`. Valores menores normalmente aumentam faces e custo, sem relação linear garantida. Comece pelo padrão e refine apenas quando necessário. Menor desvio não garante reparar topologia.
+O desvio linear está em milímetros. Padrão `0,05 mm`; intervalo aceito de `0,001` a `100 mm`. Valores menores normalmente aumentam faces e custo, sem relação linear garantida. Comece pelo padrão e refine apenas quando necessário. Menor desvio não garante reparar topologia.
 
 ## Modos
 
@@ -56,3 +56,7 @@ Use um estilo que mostre materiais; Monocromático não exibe as cores. Os mater
 Para Empurrar/Puxar, entre no componente e escolha uma face plana compatível. Ser sólido não impede essa ferramenta. Superfícies curvas importadas continuam formadas por faces; não se comportam como features paramétricas. Nem toda edição local preserva o sólido.
 
 Não há sincronização ou atualização de componentes existentes. Para reimportar, remova/oculte a versão anterior e importe novamente.
+
+## Modelos grandes — 0.4.1
+
+O teto de desvio linear agora é 100 mm. Comece comparando valores como 5, 10 e 20 mm antes de aumentar mais. Maior desvio pode simplificar o contorno. Isso não remove a natureza poligonal da geometria, não substitui suavização e não garante corrigir defeitos. O limite angular e as tentativas de conversão também influenciam a quantidade de faces; reduzir faces não é garantido de forma proporcional.

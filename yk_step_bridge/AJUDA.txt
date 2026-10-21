@@ -1,4 +1,4 @@
-FreeCAD Bridge 0.4.0 — Barra de ferramentas
+FreeCAD Bridge 0.4.1 — Barra de ferramentas
 Autor: Yruam Kaffer de Faria. PolyForm Noncommercial 1.0.0.
 
 Instale o RBZ no Gerenciador de Extensões e reinicie o SketchUp.
@@ -26,3 +26,11 @@ Validação: sintaxe Ruby/Python, arquivos dos ícones, igualdade do conversor
 e integridade do pacote verificadas. Interface real, encaixe e restauração
 precisam ser conferidos no SketchUp 2026 Windows, indisponível neste ambiente.
 RBZ sem assinatura oficial, conforme solicitado.
+
+0.4.1: intervalo do desvio linear ampliado para 0,001 a 100 mm.
+Padrão preservado: 0,05 mm. Valores maiores simplificam a aproximação das
+superfícies e podem alterar o contorno visível; não são uma tolerância de
+fabricação e não restauram superfícies paramétricas no SketchUp.
+As tentativas de reparo podem usar metade do desvio informado e o limite
+angular do conversor também influencia a densidade da malha.
+O limite anterior era 0,001 a 5 mm, não 0,05 a 5 mm.

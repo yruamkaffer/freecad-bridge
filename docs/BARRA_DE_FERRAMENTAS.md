@@ -26,7 +26,7 @@ Passe o mouse para ver a dica. Durante uma conversão externa, STEP e JSON ficam
 
 A versão 0.4.0 preserva o carregador e as configurações existentes. Reinicie o SketchUp após instalar; instalar sobre arquivos antigos não substitui o Ruby já carregado naquela sessão.
 
-Confira **Diagnóstico (0.4.0)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
+Confira **Diagnóstico (0.4.1)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
 
 ## Implementação e limites
 
