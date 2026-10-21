@@ -1,4 +1,4 @@
-FreeCAD Bridge 0.4.1 — Barra de ferramentas
+FreeCAD Bridge 0.4.3 — Barra de ferramentas
 Autor: Yruam Kaffer de Faria. PolyForm Noncommercial 1.0.0.
 
 Instale o RBZ no Gerenciador de Extensões e reinicie o SketchUp.
@@ -34,3 +34,8 @@ fabricação e não restauram superfícies paramétricas no SketchUp.
 As tentativas de reparo podem usar metade do desvio informado e o limite
 angular do conversor também influencia a densidade da malha.
 O limite anterior era 0,001 a 5 mm, não 0,05 a 5 mm.
+
+0.4.2: suavização reaplicada após restaurar a malha para preservar o sólido.
+Reimporte modelos antigos para aplicar a correção. Confira com Geometria oculta desativada.
+
+0.4.3: nova marca de ponte e seta nos botões STEP e Sobre.

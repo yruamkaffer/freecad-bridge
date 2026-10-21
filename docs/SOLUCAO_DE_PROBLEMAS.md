@@ -39,3 +39,9 @@ Não remova peças ou declare sólidos aprovados somente para ocultar o erro. Pr
 ## Access violation na leitura STEP
 
 Se o traceback aponta `Part.read`, a falha ocorreu antes da triangulação e da criação de faces. Reabra o mesmo STEP no FreeCAD e teste outro STEP conhecido para distinguir arquivo específico de ambiente de execução. Não é, por si só, diagnóstico de peça não sólida.
+
+## Sólido aparece todo triangulado após restauração
+
+Até a 0.4.1, a mensagem “limpeza de faces revertida para preservar sólido” indicava uma restauração que também perdia a suavização. A 0.4.2 reaplica automaticamente a suavização à geometria restaurada e informa isso no relatório. Reimporte o arquivo para aplicar a correção; componentes já inseridos não são alterados automaticamente.
+
+Confira o resultado com **Geometria oculta** desativada. Arestas acentuadas (20 graus ou mais) continuam visíveis. A suavização não reconstrói superfícies CAD nem garante remover todas as linhas de uma exportação vetorial: confira a vista e o arquivo exportado. Aumentar o desvio linear não substitui esse tratamento.

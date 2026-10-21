@@ -2,6 +2,12 @@
 
 Prioridades propostas, sem compromisso de prazo.
 
+## Entregue na 0.4.2
+
+- Suavização preservada após restaurar a malha para manter o sólido.
+- Conferência de faces/fechamento após restauração e mensagem no relatório.
+- Desvio linear 0,001–100 mm mantido da 0.4.1.
+
 ## Entregue na 0.4.0
 
 - Barra nativa com cinco atalhos e ícones próprios.

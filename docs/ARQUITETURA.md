@@ -33,7 +33,7 @@ Tenta `MeshPart.meshFromShape` com desvios angulares 0,15 e 0,08 radianos, alter
 
 Valida coordenadas finitas e índices antes de tocar no modelo. Converte mm para polegadas, constrói com fator 1000 e retorna por transformação. Isso reduz problemas com arestas pequenas, sem eliminar todos os limites numéricos.
 
-Pinta antes da limpeza. Remove arestas coplanares de mesmo material e pode suavizar arestas entre normais com ângulo inferior a 20 graus. Se a limpeza perde um fechamento anterior, reconstrói e repinta a tesselação original.
+Pinta antes da limpeza. Remove arestas coplanares de mesmo material. Se a limpeza perde um fechamento anterior, reconstrói e repinta a tesselação original, conferindo novamente contagem de faces e fechamento. Depois aplica uma etapa independente de suavização às arestas da geometria final com ângulo entre normais inferior a 20 graus. Essa etapa altera somente os atributos soft/smooth, sem apagar faces ou arestas; também roda após a restauração. O fluxo é compartilhado por importações STEP e JSON.
 
 Validação final usa `manifold?`. Atributos da instância no dicionário `YKStepBridge`: `source` e `source_index`. O índice vale para aquela enumeração; não é persistente entre exportações.
 

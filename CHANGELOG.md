@@ -1,5 +1,21 @@
 # Histórico
 
+## 0.4.3 — 2026-10-21
+
+- Marca própria de ponte e seta nos botões STEP e Sobre.
+- PNGs de 24/32 pixels e fontes SVG; marca de 512 pixels e ICO para atalhos opcionais.
+- Documentação e guia visual atualizados.
+- Geometria e correção de suavização da 0.4.2 preservadas. Sem assinatura oficial.
+
+## 0.4.2 — 2026-10-21
+
+- Suavização aplicada à geometria final, inclusive após restauração da tesselação para preservar o sólido.
+- Limpeza coplanar e suavização separadas; a suavização apenas altera atributos das arestas.
+- Restauração confere novamente a quantidade de faces e o fechamento antes de continuar.
+- Relatório informa a suavização reaplicada; materiais são reaplicados antes dela.
+- Mesmo tratamento para importação STEP e JSON; mantidos ângulo de 20 graus, modos, cores e intervalo de desvio 0,001–100 mm.
+- Correção manual equivalente validada pelo autor no SketchUp 2026; pacote automatizado ainda requer teste no aplicativo.
+
 ## 0.4.1 — 2026-10-20
 
 - Desvio linear ampliado de 0,001–5 mm para 0,001–100 mm.

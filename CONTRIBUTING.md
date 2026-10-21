@@ -12,7 +12,7 @@ Inclua versões, modo, desvio, passos, erro e relatório. Prefira STEP mínimo; 
 2. Leia arquitetura e formato JSON.
 3. Preserve identificadores de carregamento e evite duas instalações em paralelo.
 4. Execute `python -m unittest discover -s tests -v` e `python tools/build_release.py`.
-5. Confira Ruby com `ruby -c` quando disponível e teste nas APIs reais do SketchUp.
+5. Confira Ruby com `ruby -c`, execute `ruby tests/test_cleanup.rb` e teste nas APIs reais do SketchUp.
 6. Teste mudanças de conversão no FreeCADCmd e depois no SketchUp, informando versões.
 7. Atualize docs e changelog se mudar comportamento.
 8. Descreva problema, resultado, validação e limites no PR.
@@ -25,6 +25,7 @@ Não remova rejeição de metadados ambíguos apenas para reduzir avisos. Altera
 | --- | --- |
 | Plano com furo | Escala, fechamento e limpeza. |
 | Corpo curvo | Aproximação, orientação e suavização. |
+| Limpeza revertida para manter sólido | Faces restauradas, cores, suavização reaplicada e estado SÓLIDO. |
 | Uma cor | Material em todas as faces. |
 | Múltiplas cores | Cobertura e fronteiras de material. |
 | Montagem repetida | Contagem, posição, nomes e ambiguidades. |

@@ -2,7 +2,7 @@
 
 ## Ambiente
 
-Use Python 3.10 ou mais recente para as ferramentas do repositório. Nenhuma biblioteca externa é necessária para o build ou os testes isolados. A extensão não usa esse Python para importar STEP: a conversão real roda no ambiente do FreeCAD.
+Use Python 3.10 ou mais recente para as ferramentas do repositório. Nenhuma biblioteca externa é necessária para o build ou os testes Python. Os testes de regressão da limpeza também usam Ruby 3.x, sem gems externas. A extensão não usa esse Python para importar STEP: a conversão real roda no ambiente do FreeCAD.
 
 ## Comandos na raiz
 
@@ -10,6 +10,9 @@ Use Python 3.10 ou mais recente para as ferramentas do repositório. Nenhuma bib
 python -m unittest discover -s tests -v
 python tools/build_release.py
 python tools/build_release.py --check
+ruby -c yk_step_bridge.rb
+ruby -c yk_step_bridge/main.rb
+ruby tests/test_cleanup.rb
 ```
 
 O build extrai a versão de `yk_step_bridge.rb`, verifica a presença dos arquivos necessários, confere sintaxe Python e igualdade das cópias de licença/avisos. Gera `dist/FreeCAD_Bridge_<versão>.rbz` e `dist/SHA256.txt`, usando somente arquivos explicitamente selecionados. Inclui os cinco SVGs originais, dez PNGs de 24/32 pixels e AJUDA.txt. Não inclui modelos, caches, configuração de usuário ou os guias do repositório no RBZ.
@@ -40,3 +43,7 @@ Siga a matriz manual de CONTRIBUTING. Registre versão, arquivo de teste, modo, 
 Atualize metadados do carregador e as referências de versão no menu, relatório, README, changelog e notas de Release. Gere o RBZ e atualize os links de download. Não mude o identificador do carregador apenas para renomear a apresentação.
 
 Código assinado futuramente precisará ser submetido novamente ao serviço oficial se seu conteúdo for alterado. Até lá, distribua como pacote sem assinatura.
+
+## Regressão da restauração — 0.4.2
+
+`ruby tests/test_cleanup.rb` carrega os métodos reais de limpeza/suavização com objetos mínimos da API. Força uma perda de fechamento e verifica que a malha restaurada recebe soft/smooth; também cobre limpeza bem-sucedida, arestas acentuadas, bordas abertas, materiais diferentes e falha de restauração. Não executa o kernel geométrico nem prova o comportamento de manifold? ou erase! no SketchUp. Para integração, use modelo próprio que acione a restauração e confira relatório, cores e sólido no aplicativo.

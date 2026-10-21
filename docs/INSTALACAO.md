@@ -14,12 +14,12 @@ Não há homologação para todas as versões. Comece com um modelo pequeno com 
 
 ## Passo a passo
 
-1. Obtenha `FreeCAD_Bridge_0.4.1.rbz` de `dist/` ou do asset da Release, quando publicado.
+1. Obtenha `FreeCAD_Bridge_0.4.3.rbz` de `dist/` ou do asset da Release, quando publicado.
 2. Abra o Gerenciador de Extensões, clique em Instalar extensão e selecione o RBZ.
 3. Reinicie o SketchUp.
 4. Use **Extensões → FreeCAD Bridge → Configurar FreeCADCmd**.
 5. Selecione `FreeCADCmd.exe`; não selecione `FreeCAD.exe`, atalho ou pasta.
-6. Consulte **Diagnóstico (0.4.1)** para conferir caminho e existência do executável.
+6. Consulte **Diagnóstico (0.4.3)** para conferir caminho e existência do executável.
 
 Nomes e localização dos controles podem variar com idioma e versão.
 
@@ -27,7 +27,7 @@ Nomes e localização dos controles podem variar com idioma e versão.
 
 Na primeira utilização, a barra aparece automaticamente. Se estiver oculta, abra **Extensões → FreeCAD Bridge → Mostrar barra de ferramentas**. Arraste-a para encaixar ou manter flutuante. Consulte o [guia dos ícones](BARRA_DE_FERRAMENTAS.md).
 
-Confira **Diagnóstico (0.4.1)** depois de reiniciar. Esta versão preserva configurações e identificadores internos da 0.3.0. Builds de diagnóstico não publicados não fazem parte desta distribuição.
+Confira **Diagnóstico (0.4.3)** depois de reiniciar. Esta versão preserva configurações e identificadores internos da 0.3.0. Builds de diagnóstico não publicados não fazem parte desta distribuição.
 
 ## Sem assinatura oficial
 

@@ -21,8 +21,8 @@ O `.gitignore` exclui modelos CAD, configuração local, logs e caches. `dist/` 
 
 1. Rode testes e `python tools/build_release.py`.
 2. Faça o commit revisado.
-3. Crie Release com tag `v0.4.1` apontando para esse commit.
-4. Copie [RELEASE_0.4.1.md](RELEASE_0.4.1.md) nas notas.
+3. Crie Release com tag `v0.4.3` apontando para esse commit.
+4. Copie [RELEASE_0.4.3.md](RELEASE_0.4.3.md) nas notas.
 5. Anexe RBZ e SHA256 de `dist/`.
 6. Revise antes de publicar.
 
@@ -32,4 +32,4 @@ Confira autoria, licença, ausência de confidenciais e estado de validação. R
 
 ## Distribuição atual
 
-O README aponta para o instalador 0.4.1 em dist/. Versões antigas podem permanecer para referência; confira a versão antes de instalar. As notas históricas 0.3.0 são preservadas. O build da versão nova inclui ícones e AJUDA.txt além do código/licença. Não publique os STEP de diagnóstico recebidos em conversas como exemplos do projeto.
+O README aponta para o instalador 0.4.3 em dist/. Versões antigas podem permanecer para referência; confira a versão antes de instalar. As notas históricas 0.3.0 são preservadas. O build da versão nova inclui ícones e AJUDA.txt além do código/licença. Não publique os STEP de diagnóstico recebidos em conversas como exemplos do projeto.

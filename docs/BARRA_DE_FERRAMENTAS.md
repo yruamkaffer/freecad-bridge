@@ -26,10 +26,14 @@ Passe o mouse para ver a dica. Durante uma conversão externa, STEP e JSON ficam
 
 A versão 0.4.0 preserva o carregador e as configurações existentes. Reinicie o SketchUp após instalar; instalar sobre arquivos antigos não substitui o Ruby já carregado naquela sessão.
 
-Confira **Diagnóstico (0.4.1)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
+Confira **Diagnóstico (0.4.3)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
 
 ## Implementação e limites
 
 `UI::Command` compartilha callbacks entre menu e barra. Os ícones PNG de 24 e 32 pixels são carregados de `yk_step_bridge/icons/`; os SVGs originais também são distribuídos para manutenção. A inicialização usa `get_last_state`, `show` e `restore` da API nativa.
 
 O empacotamento confere a presença dos dez PNGs e cinco SVGs. Não há nova dependência em tempo de execução. A interface real e a persistência de posição precisam ser verificadas no SketchUp; a checagem local não simula a janela do aplicativo.
+
+## Marca — 0.4.3
+
+STEP e Sobre usam a marca de ponte e seta. Veja [identidade visual](IDENTIDADE_VISUAL.md). Os outros comandos mantêm símbolos de função.

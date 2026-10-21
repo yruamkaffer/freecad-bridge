@@ -43,26 +43,11 @@ module YKStepBridge
       group.entities.fill_from_mesh(mesh, true, 0)
       raise 'Falha ao criar todas as faces' unless group.entities.grep(Sketchup::Face).size == part['triangles'].size
       paint_part(group.entities, part, material_cache, model)
-      closed_before_cleanup = group.manifold?
-      # Erase coplanar subdivisions, not just hide them. Recheck each edge
-      # after every merge because face identities change.
-      group.entities.grep(Sketchup::Edge).each do |edge|
-        next unless edge.valid? && edge.faces.size == 2
-        a, b = edge.faces
-        dot = a.normal.dot(b.normal)
-        if a.material == b.material && dot > 1.0 - 1.0e-10 && b.vertices.all? { |v| v.position.distance_to_plane(a.plane).abs < 1.0e-7 }
-          edge.erase!
-        elsif dot > Math.cos(20.0 * Math::PI / 180.0)
-          edge.soft = true
-          edge.smooth = true
-        end
-      end
-      # Restore original tessellation if planar merging broke closure.
-      if closed_before_cleanup && !group.manifold?
+      clean_and_smooth(group, report) do
         group.entities.clear!
         group.entities.fill_from_mesh(mesh, true, 0)
+        raise 'Falha ao restaurar todas as faces' unless group.entities.grep(Sketchup::Face).size == part['triangles'].size
         paint_part(group.entities, part, material_cache, model)
-        report << "#{group.name}: limpeza de faces revertida para preservar sólido."
       end
       group.transform!(Geom::Transformation.scaling(0.001))
       component = group.to_component
@@ -83,6 +68,35 @@ module YKStepBridge
     model.abort_operation if started && model
     UI.messagebox("Falha na importação: #{e.message}")
   end
+  # Keep topology edits separate from display attributes: a restored mesh
+  # must receive the same smoothing as a mesh whose planar cleanup succeeded.
+  def self.clean_and_smooth(group, report)
+    closed_before_cleanup = group.manifold?
+    group.entities.grep(Sketchup::Edge).each do |edge|
+      next unless edge.valid? && edge.faces.size == 2
+      a, b = edge.faces
+      if a.material == b.material && a.normal.dot(b.normal) > 1.0 - 1.0e-10 && b.vertices.all? { |v| v.position.distance_to_plane(a.plane).abs < 1.0e-7 }
+        edge.erase!
+      end
+    end
+    if closed_before_cleanup && !group.manifold?
+      yield
+      raise 'Falha ao restaurar o fechamento do sólido' unless group.manifold?
+      report << "#{group.name}: limpeza de faces revertida para preservar sólido; suavização reaplicada."
+    end
+    smooth_edges(group.entities)
+  end
+
+  def self.smooth_edges(entities)
+    threshold = Math.cos(20.0 * Math::PI / 180.0)
+    entities.grep(Sketchup::Edge).each do |edge|
+      next unless edge.valid? && edge.faces.size == 2
+      next unless edge.faces[0].normal.dot(edge.faces[1].normal) > threshold
+      edge.soft = true
+      edge.smooth = true
+    end
+  end
+
   def self.material_for(color, cache, model)
     key = color.map { |v| v.round }.join('_')
     cache[key] ||= begin
@@ -125,7 +139,7 @@ module YKStepBridge
       source_index = data['parts'][i]['source_index'] || i + 1
       "<tr><td>#{source_index}</td><td>#{escape.call(component.name)}</td><td>#{component.manifold? ? 'Sólido' : 'Verificar'}</td><td><button onclick='sketchup.locate(#{i})'>Localizar</button></td></tr>"
     end.join
-    text_report = "FreeCAD Bridge 0.4.1\nArquivo: #{data['source']}\n" + report.join("\n")
+    text_report = "FreeCAD Bridge 0.4.3\nArquivo: #{data['source']}\n" + report.join("\n")
     html = "<!doctype html><meta charset='utf-8'><style>body{font:15px Arial;padding:20px;color:#243447}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:9px;border-bottom:1px solid #ddd}button{padding:6px 12px;cursor:pointer}pre{white-space:pre-wrap;font:12px monospace}</style><h2>FreeCAD Bridge</h2><p>#{escape.call(data['source'])} · #{imported.size} componentes · #{imported.count(&:manifold?)} sólidos</p><table><tr><th>Índice STEP</th><th>Componente</th><th>Resultado</th><th></th></tr>#{rows}</table><p><button onclick='sketchup.save_report()'>Salvar relatório</button></p><details><summary>Detalhes da conversão</summary><pre>#{escape.call(text_report)}</pre></details>"
     context = (model.active_path || []).dup
     context << container if container
@@ -189,7 +203,7 @@ module YKStepBridge
 
   def self.diagnostics
     path = saved_executable
-    UI.messagebox("FreeCAD Bridge 0.4.1\nExecutável: #{path}\nExiste: #{File.file?(path)}\nConfiguração: #{config_file}")
+    UI.messagebox("FreeCAD Bridge 0.4.3\nExecutável: #{path}\nExiste: #{File.file?(path)}\nConfiguração: #{config_file}")
   end
 
   def self.import_step
@@ -261,7 +275,7 @@ module YKStepBridge
   end
 
   def self.show_about
-    UI.messagebox("FreeCAD Bridge 0.4.1\nYruam Kaffer de Faria\nCopyright © 2026\nPolyForm Noncommercial 1.0.0\nUso e modificações sem fins comerciais, conforme LICENSE.txt.")
+    UI.messagebox("FreeCAD Bridge 0.4.3\nYruam Kaffer de Faria\nCopyright © 2026\nPolyForm Noncommercial 1.0.0\nUso e modificações sem fins comerciais, conforme LICENSE.txt.")
   end
 
   def self.register_interface
@@ -269,7 +283,7 @@ module YKStepBridge
       toolbar_command('Importar STEP automaticamente', 'step', 'Selecionar STEP e converter com o FreeCAD em segundo plano.') { import_step },
       toolbar_command('Importar geometria FreeCAD (.json)', 'json', 'Importar um JSON compatível já convertido.') { import_json },
       toolbar_command('Configurar FreeCADCmd', 'settings', 'Selecionar o executável FreeCADCmd.exe usado na conversão.') { configure },
-      toolbar_command('Diagnóstico (0.4.1)', 'diagnostics', 'Conferir versão, caminho do executável e arquivo de configuração.') { diagnostics },
+      toolbar_command('Diagnóstico (0.4.3)', 'diagnostics', 'Conferir versão, caminho do executável e arquivo de configuração.') { diagnostics },
       toolbar_command('Sobre / licença', 'about', 'Autoria, versão e licença do FreeCAD Bridge.') { show_about }
     ]
     @commands.first(2).each do |command|

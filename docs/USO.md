@@ -60,3 +60,9 @@ Não há sincronização ou atualização de componentes existentes. Para reimpo
 ## Modelos grandes — 0.4.1
 
 O teto de desvio linear agora é 100 mm. Comece comparando valores como 5, 10 e 20 mm antes de aumentar mais. Maior desvio pode simplificar o contorno. Isso não remove a natureza poligonal da geometria, não substitui suavização e não garante corrigir defeitos. O limite angular e as tentativas de conversão também influenciam a quantidade de faces; reduzir faces não é garantido de forma proporcional.
+
+## Suavização após preservar o sólido — 0.4.2
+
+A limpeza de divisões coplanares pode precisar ser desfeita para manter o fechamento. Nesse caso a extensão restaura as faces e cores, verifica o sólido e reaplica a suavização de 20 graus. O relatório registra a restauração com “suavização reaplicada”. A importação JSON recebe o mesmo tratamento.
+
+Para testar uma atualização, reimporte o modelo. Confira **SÓLIDO** no relatório e a aparência com Geometria oculta desativada. Para vistas vetoriais, confira também o resultado da exportação: a suavização não transforma a malha em superfícies paramétricas.
