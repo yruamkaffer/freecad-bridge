@@ -29,7 +29,11 @@ Não remova rejeição de metadados ambíguos apenas para reduzir avisos. Altera
 | Uma cor | Material em todas as faces. |
 | Múltiplas cores | Cobertura e fronteiras de material. |
 | Montagem repetida | Contagem, posição, nomes e ambiguidades. |
-| Geometria inválida | Rejeição Estrito e avisos Visualização. |
+| Geometria inválida | Rejeição Estrito, avisos Visualização e omissões em Sólidos disponíveis. |
+| Superfície aberta | Mantida e identificada; sem tampa automática. |
+| Triângulos estreitos | União limitada, volume e cores preservadas. |
+| Contato não manifold | Completo corrige se permitido; Conservador mantém diagnóstico. |
+| JSON tratado | Proveniência de cores, origem preservada, CAD não revalidado. |
 | Importar dentro de componente | Contexto e Localizar. |
 | Falha de conversão | Mensagem e liberação para novo trabalho. |
 

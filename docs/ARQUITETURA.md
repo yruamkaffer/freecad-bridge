@@ -1,54 +1,55 @@
-# Arquitetura e decisões técnicas
-
-## Responsabilidades
+# Arquitetura — 0.5.0
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `yk_step_bridge.rb` | Registro, versão, descrição, autoria e licença. |
-| `main.rb` | Interface, configuração, processo externo, criação de geometria/materiais, limpeza e relatório. |
-| `convert.py` | Leitura STEP, reparo, triangulação, validação CAD e saída JSON. |
-| `mesh_tools.py` | Deduplicação, orientação e contagem de defeitos topológicos da malha. |
-| `metadata.py` | Leitura/associação de nomes e cores e transferência RGB. |
+| yk_step_bridge.rb | Registro, versão, autoria e licença. |
+| main.rb | Interface, seleção de modos, processo externo, reconstrução, materiais, suavização e relatório. |
+| convert.py | Entrada FreeCADCmd, trabalho indicado por YK_STEP_JOB, escrita atômica/erro. |
+| conversion.py | Motor importável, políticas de importação, tentativas CAD/malha, cores e reprocessamento JSON. |
+| cad_tools.py | Inventário de sólidos, cascas externas e faces soltas, sem duplicar faces de sólidos. |
+| mesh_tools.py | Normalização, auditoria, união limitada e separação de contatos, sem bibliotecas externas. |
+| metadata.py | Nomes e cores por associação de assinatura geométrica. |
 
-## Fluxo
+## Conversão STEP
 
-1. Ruby coleta caminho, desvio e modo, cria trabalho em pasta temporária e fornece `YK_STEP_JOB` ao FreeCADCmd.
-2. Python lê `Part.read` e tenta obter metadados de `Import.insert` em documento auxiliar.
-3. Cada sólido passa pelas tentativas de conversão e associação de metadados.
-4. A saída é escrita em `.tmp` e renomeada; falhas geram `.error` com traceback.
-5. Ruby consulta a conclusão por timer de 0,5 segundo, valida JSON e cria componentes em uma operação.
-6. Estrito aborta a operação se a verificação final falhar. A conclusão apresenta relatório e remove temporários.
+O Ruby cria trabalho temporário com origem, saída, desvio, política e tratamento; inicia FreeCADCmd e acompanha por timer. O motor lê Part.read e tenta metadados por Import.insert em documento auxiliar. O documento é fechado ao finalizar, inclusive em falhas.
 
-O fluxo implementado não faz chamadas de rede. Os logs temporários são removidos ao final; ainda não existe exportação persistente de todos os logs de falha.
+O inventário enumera sólidos, cascas que não pertencem a sólidos e faces que não pertencem a essas entidades. Visualização converte superfícies; Estrito as rejeita; Sólidos disponíveis lista a omissão. Linhas sem faces não são importadas.
 
-## Reparo e malha
+Para sólidos, tenta forma original e Shape.fix quando permitido. O reparo CAD deve conservar um sólido, volume dentro de 1 ppm/piso absoluto e caixa dentro de 1e-5 mm. A triangulação tenta MeshPart com ângulos 0,15/0,08 radianos, metade do desvio e Shape.tessellate quando reparos estão habilitados. A primeira candidata válida/aprovada é aceita.
 
-O conversor tenta forma original e cópia com `Shape.fix`. O reparo deve manter um sólido, volume dentro de uma parte por milhão com piso absoluto e caixa envolvente dentro de `1e-5 mm`. Esses critérios não provam equivalência topológica.
+Cada malha é normalizada/orientada e passa pelos tratamentos escolhidos. Uma malha CAD válida é aprovada somente se o diagnóstico não aponta bordas abertas, arestas/vértices não manifold, conflitos ou degenerações. Os detalhes e limites estão em [tratamentos](TRATAMENTOS.md). A auditoria não testa exaustivamente auto-interseções.
 
-Tenta `MeshPart.meshFromShape` com desvios angulares 0,15 e 0,08 radianos, alternativa com metade do desvio linear e `Shape.tessellate`. A primeira opção CAD válida/fechada é aceita. Sem sucesso, o melhor resultado pelos contadores só pode ser importado em Visualização.
+Sem sucesso, Estrito agrega erros e rejeita o conjunto; Sólidos disponíveis omite com motivo; Visualização conserva o melhor resultado disponível. Uma peça sem qualquer triangulação ainda pode impedir Visualização — ela não inventa geometria.
 
-`prepare` combina coordenadas arredondadas a oito casas, elimina triângulos repetidos/degenerados por índices e propaga orientação pela adjacência. Exige triângulos presentes, zero bordas abertas, zero arestas com mais de duas incidências e zero conflitos. Não testa todas as auto-interseções geométricas.
+## Cores
+
+Nomes/cores são associados por tipo geométrico, volume, caixa e centro de massa. Zero ou múltiplas correspondências geram aviso. Não se escolhe arbitrariamente entre ocorrências coincidentes.
+
+A cor uniforme e as cores por triângulo são buscadas usando a malha normalizada anterior aos novos ajustes. A lista de proveniência transporta a cor para cada triângulo final. Isso conserva cores já encontradas mesmo quando vértices são unidos ou deslocados; não melhora correspondências ausentes na triangulação original.
+
+## JSON
+
+O importador direto permanece compatível com yk-step-bridge-1/mm. O comando Tratar JSON existente usa o mesmo motor, conservando cores pela origem dos triângulos. Não relê o CAD nem transforma cad_valid falso em verdadeiro. A ferramenta tools/treat_json.py executa esse tratamento com Python padrão, sem FreeCAD.
 
 ## SketchUp
 
-Valida coordenadas finitas e índices antes de tocar no modelo. Converte mm para polegadas, constrói com fator 1000 e retorna por transformação. Isso reduz problemas com arestas pequenas, sem eliminar todos os limites numéricos.
+Valida dados e indicadores de origem antes da operação estrita. Cria a malha em escala 1000, pinta, limpa divisões coplanares de mesmo material e verifica se o fechamento foi preservado. Se necessário restaura faces/materiais e reaplica suavização de 20 graus. Superfícies recebem apenas suavização para preservar sua geometria aberta.
 
-Pinta antes da limpeza. Remove arestas coplanares de mesmo material. Se a limpeza perde um fechamento anterior, reconstrói e repinta a tesselação original, conferindo novamente contagem de faces e fechamento. Depois aplica uma etapa independente de suavização às arestas da geometria final com ângulo entre normais inferior a 20 graus. Essa etapa altera somente os atributos soft/smooth, sem apagar faces ou arestas; também roda após a restauração. O fluxo é compartilhado por importações STEP e JSON.
+A verificação final do SketchUp continua obrigatória para peças incluídas em Estrito/Sólidos disponíveis: uma falha aborta a operação inteira. O modo parcial só omite peças rejeitadas pelo conversor; ele não mascara falhas finais de reconstrução no SketchUp.
 
-Validação final usa `manifold?`. Atributos da instância no dicionário `YKStepBridge`: `source` e `source_index`. O índice vale para aquela enumeração; não é persistente entre exportações.
+O relatório diferencia sólidos aprovados e superfícies, mostra omissões e reparos. Atributos da instância em YKStepBridge: source, source_index, geometry_type e repairs (JSON). Não há atualização associativa de componentes existentes.
 
-## Metadados
+## Processo e interface
 
-Associação usa volume, caixa envolvente e centro de massa: volume com tolerância relativa `1e-7` e piso absoluto `1e-5`, coordenadas `1e-5`. Zero ou múltiplas correspondências geram aviso, sem escolher arbitrariamente.
+Um trabalho por vez, acompanhamento a cada 0,5 segundo e limite de dez minutos. Saída .tmp é renomeada; falhas geram .error. Temporários são removidos ao final. O fluxo não faz chamadas de rede.
 
-Cor uniforme exige confirmação em todas as faces. Cores por face usam chaves de triângulos com coordenadas arredondadas a seis casas. Triângulos sem correspondência ficam sem cor confirmada. Reparo e triangulação alternativa podem reduzir a cobertura.
+A barra mantém cinco comandos e ícones; as ações STEP/JSON ficam indisponíveis durante conversão. Tratar JSON existente verifica o mesmo bloqueio. O estado nativo da barra é restaurado e o menu permite reexibi-la.
 
-Ruby roda no SketchUp e Python no FreeCAD; não empacotamos os aplicativos nem seu kernel CAD. Ferramentas de build/testes usam Python padrão separado. APIs podem mudar com versões; o alvo documentado não significa compatibilidade universal.
+## Fontes das APIs
 
-## Interface 0.4.0
+- [FreeCAD TopoShape](https://freecad.github.io/SourceDoc/d8/ded/classPart_1_1TopoShape.html)
+- [SketchUp ComponentInstance](https://ruby.sketchup.com/Sketchup/ComponentInstance.html)
+- [SketchUp SketchupExtension](https://ruby.sketchup.com/SketchupExtension.html)
 
-`register_interface` cria cinco `UI::Command`, armazena-os em `@commands` e compartilha os objetos entre o submenu e `@toolbar`. `toolbar_command` define título, tooltip, texto de status e caminhos de ícones. `show_about` concentra versão, autoria e licença.
-
-A inicialização segue o estado nativo: primeira exibição chama `show`; sessões seguintes usam `restore`. O comando Mostrar barra permite recuperá-la. A guarda `file_loaded?` evita duplicação no carregamento normal. Os comandos STEP/JSON usam validation proc que retorna MF_GRAYED enquanto `@job` existe.
-
-Esta versão altera apenas registro da interface e metadados de versão. `convert.py`, `mesh_tools.py`, `metadata.py` e os métodos de reconstrução foram preservados da versão 0.3.0.
+FreeCADCmd e SketchUp não são empacotados. A integração Windows completa exige validação no ambiente alvo, além dos testes do motor.

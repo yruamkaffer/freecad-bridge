@@ -1,60 +1,37 @@
 # FreeCAD Bridge
 
-**STEP to SketchUp, with named components, colors and solid checks.**
+**STEP to SketchUp: named components, colors, bounded mesh repair and explicit surface handling.**
 
-By **Yruam Kaffer de Faria** · Version **0.4.3** · Target: **Windows / SketchUp 2026 desktop**
+By **Yruam Kaffer de Faria** · Version **0.5.0** · Target: **SketchUp 2026 desktop / Windows**
 
-[Português — full documentation](README.md)
+[Full Portuguese documentation](README.md) · [Release notes](docs/RELEASE_0.5.0.md) · [License](LICENSE.txt)
 
-FreeCAD Bridge uses an installed FreeCAD command-line executable to convert STEP files in the background. It creates a component per solid, attempts geometry repair, removes coplanar subdivisions with matching materials and checks the final components with SketchUp solid detection.
+Uses an installed FreeCAD command-line executable to convert STEP in the background. It preserves part placement, transfers available names/RGB colors when safely matched and reports per-part results. The package is unsigned.
 
-## New in 0.4.3
+## New in 0.5.0
 
-A bridge-and-arrow brand mark replaces the STEP and About toolbar icons. Includes 24/32-pixel PNGs, editable SVG and optional ICO artwork for Windows shortcuts. Other commands retain their functional symbols.
-
-Includes the 0.4.2 smoothing fix after mesh restoration. Linear deflection remains **0.001–100 mm**, default **0.05 mm**. This visual update does not change geometry or conversion.
-
-## Toolbar — introduced in 0.4.0
-
-A dockable/floating toolbar with five actions: STEP import, JSON import, FreeCADCmd setup, diagnostics and project information. Commands are shared with the Extensions menu. Import actions are disabled while a background conversion is running. The native toolbar API restores its previous location and visibility.
-
-![Toolbar icons and actions](docs/assets/barra_ferramentas.png)
-
-This is an icon guide, not a screenshot of SketchUp. Use **Extensions → FreeCAD Bridge → Mostrar barra de ferramentas** to show a hidden toolbar. See the [toolbar guide](docs/BARRA_DE_FERRAMENTAS.md).
-
-The toolbar was introduced in 0.4.0. Version 0.4.3 also fixes smoothing after geometry restoration; model-specific import issues remain possible. Private diagnostic builds are not included.
+- Merge near-coincident vertices within 0.0001 mm when a closed mesh has very thin triangles.
+- Locally separate touching surface fans by 0.001 mm in Complete treatment mode.
+- Recheck closure, winding, manifold edges/vertices, degeneracy, connected regions, bounds and mesh volume; reject out-of-limit attempts.
+- Import loose shells/faces as explicitly labeled surfaces in Visualization mode.
+- Solids Available mode omits rejected parts with names/reasons instead of silently losing geometry.
+- Treat Existing JSON command; triangle colors retain provenance after the new adjustments.
+- Preserve the 0.4.2 smoothing fix and 0.4.3 toolbar artwork.
 
 ## Install
 
-1. Install FreeCAD and locate `FreeCADCmd.exe`.
-2. Download [FreeCAD_Bridge_0.4.3.rbz](dist/FreeCAD_Bridge_0.4.3.rbz).
-3. Install through SketchUp Extension Manager and restart SketchUp.
-4. Open **Extensions → FreeCAD Bridge → Configurar FreeCADCmd** and select the executable.
-5. Choose **Importar STEP automaticamente**, select a STEP file and start with `0.05 mm` linear deflection.
+Install [FreeCAD_Bridge_0.5.0.rbz](dist/FreeCAD_Bridge_0.5.0.rbz) through Extension Manager and restart SketchUp. Configure FreeCADCmd.exe, then choose STEP import. Linear deflection remains 0.001–100 mm, default 0.05 mm.
 
-The package is unsigned. Consult SketchUp loading policy settings if blocked. The interface and detailed documentation are currently in Portuguese.
+The interface is Portuguese: **Estrito** requires all parts to pass; **Visualização** includes surfaces/problem parts with labels; **Sólidos disponíveis** explicitly omits parts not approved by the converter and still checks included parts in SketchUp. **Completo** enables both mesh repairs; **Conservador** disables contact separation; **Sem reparos** disables optional repairs. Complete is the default and may displace local vertices by 0.001 mm.
 
-## Behavior
+The JSON toolbar button imports existing geometry unchanged. Use **Tratar JSON existente…** to apply treatments through FreeCADCmd. The source file is preserved. JSON reprocessing does not revalidate the original CAD geometry.
 
-**Estrito** requires valid CAD, a closed converted mesh and a solid final SketchUp component; failure blocks or rolls back the whole import. **Visualização** allows problematic geometry with warnings. The report includes STEP indices, names, status, Locate and text export.
+## Limits and validation
 
-Names and RGB colors are transferred when present and safely matched. Per-face colors require matching triangles and may be incomplete after repair or alternate tessellation. Curves become polygonal geometry. CAD features, parameters, textures, transparency and physical materials are not transferred. Assemblies become positioned components inside a group; hierarchy and shared definitions are not preserved.
+Curves remain polygonal. Open surfaces are not automatically capped. Names and colors must exist in the STEP; unmatched triangles may remain unpainted. Assembly hierarchy/shared definitions, textures, transparency and CAD features are not transferred. No universal solid guarantee or complete self-intersection test is provided.
 
-The previous workflow was used by the author. Core logic passed isolated checks. The toolbar passed syntax/resource/package checks; behavior and placement restoration in SketchUp still need host validation. FreeCAD 1.1 is the metadata target, with no certified version matrix. The current workflow does not support macOS, Linux or SketchUp Web.
+The author confirmed the reference manual treatments in SketchUp. The new engine has synthetic tests and private geometry checks using Open CASCADE; these do not substitute host validation of the new Windows RBZ. FreeCAD 1.1 is the metadata target. macOS/Linux/SketchUp Web are not supported by the current executable-selection workflow.
 
-## Example
+Build and test with `python tools/build_release.py`, `python -m unittest discover -s tests -v` and `ruby tests/test_cleanup.rb`. Detailed limits and checks are in the Portuguese guides. No private commercial CAD files are distributed.
 
-Import [the synthetic red tetrahedron](examples/tetraedro_vermelho.json) with the JSON icon to check the JSON path, 10 mm dimensions, color and report without FreeCAD conversion.
-
-## Development
-
-```sh
-python tools/build_release.py
-python -m unittest discover -s tests -v
-```
-
-See [architecture](docs/ARQUITETURA.md), [JSON format](docs/FORMATO_JSON.md) and [contribution guidelines](CONTRIBUTING.md). Offline tests do not verify either host application.
-
-## License
-
-Copyright © 2026 Yruam Kaffer de Faria. **PolyForm Noncommercial License 1.0.0**: public source with noncommercial permissions under the full [terms](LICENSE.txt), not unrestricted commercial use. The holder may grant separate permissions. FreeCAD and SketchUp are external dependencies; this project is not affiliated with or certified by their vendors.
+Copyright © 2026 Yruam Kaffer de Faria. PolyForm Noncommercial License 1.0.0. Independent project, not affiliated with FreeCAD, SketchUp or Trimble.

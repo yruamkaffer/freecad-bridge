@@ -1,5 +1,15 @@
 # Histórico
 
+## 0.5.0 — 2026-10-29
+
+- Tratamentos Conservador/Completo/Sem reparos, com união de vértices e separação local de contatos.
+- Auditoria de vértices não manifold, degenerações, volume e conectividade.
+- Superfícies externas aos sólidos importadas explicitamente em Visualização.
+- Modo Sólidos disponíveis e relatório de omissões/reparos.
+- Reprocessamento de JSON e preservação da origem das cores por triângulo.
+- Testes sintéticos, casos privados de regressão e documentação dos limites.
+- Referências manuais confirmadas pelo autor; integração da nova versão no Windows pendente.
+
 ## 0.4.3 — 2026-10-21
 
 - Marca própria de ponte e seta nos botões STEP e Sobre.

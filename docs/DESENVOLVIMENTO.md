@@ -1,49 +1,42 @@
-# Desenvolvimento e empacotamento
+# Desenvolvimento e empacotamento — 0.5.0
 
 ## Ambiente
 
-Use Python 3.10 ou mais recente para as ferramentas do repositório. Nenhuma biblioteca externa é necessária para o build ou os testes Python. Os testes de regressão da limpeza também usam Ruby 3.x, sem gems externas. A extensão não usa esse Python para importar STEP: a conversão real roda no ambiente do FreeCAD.
-
-## Comandos na raiz
+Python 3.10+ para build, tratamentos JSON offline e testes. Nenhum pacote externo é necessário. Ruby 3.2+ para conferir sintaxe e executar os testes isolados do importador. A conversão STEP real usa os módulos do FreeCADCmd instalado; não usa o Python do build.
 
 ```sh
-python -m unittest discover -s tests -v
 python tools/build_release.py
+python -m unittest discover -s tests -v
 python tools/build_release.py --check
 ruby -c yk_step_bridge.rb
 ruby -c yk_step_bridge/main.rb
 ruby tests/test_cleanup.rb
 ```
 
-O build extrai a versão de `yk_step_bridge.rb`, verifica a presença dos arquivos necessários, confere sintaxe Python e igualdade das cópias de licença/avisos. Gera `dist/FreeCAD_Bridge_<versão>.rbz` e `dist/SHA256.txt`, usando somente arquivos explicitamente selecionados. Inclui os cinco SVGs originais, dez PNGs de 24/32 pixels e AJUDA.txt. Não inclui modelos, caches, configuração de usuário ou os guias do repositório no RBZ.
+O build usa lista explícita de 25 arquivos: carregador, Ruby, cinco módulos Python, licenças/ajuda e ícones. Valida sintaxe Python, cópias da licença/avisos, conteúdo do ZIP e SHA256. O mesmo ambiente/bytes deve produzir a mesma saída; implementações de compressão podem mudar o hash. O build não assina nem executa Ruby/SketchUp.
 
-Datas e permissões de entradas ZIP são fixadas para reduzir variação no empacotamento. O mesmo ambiente e os mesmos bytes de origem devem gerar a mesma saída; diferenças entre implementações de compressão ainda podem afetar o hash. O build não assina o instalador e não verifica sintaxe Ruby.
+## Cobertura
 
-O modo `--check` confere o instalador atual contra todos os arquivos de origem e seu hash sem reempacotar. O build normal atualiza os hashes de todos os RBZ presentes em dist/. A geração de ícones não é necessária para usar ou empacotar o projeto: os recursos finais e SVGs editáveis estão versionados.
+Os testes Python cobrem metadados ambíguos, RGB, proveniência de cores, malhas fechadas/abertas, vértices pinçados, união de vértices, separação de contatos, rejeição por limites, superfícies e modos de importação. Também conferem instalador, recursos, links locais e exemplo sintético.
 
-## Cobertura dos testes
+Os sete testes Ruby carregam métodos reais com objetos mínimos da API. Cobrem suavização após restauração, limpeza bem-sucedida, bordas/arestas acentuadas, preservação de material, falha de restauração e classificação correta de sólidos/superfícies/CAD inválido. Não simulam o kernel ou o aplicativo inteiro.
 
-Os testes verificam RGB inválido, associação ambígua, associação de cores independente da orientação, triângulo sem correspondência, tetraedro fechado com face repetida/invertida e tetraedro aberto. Usam geometrias e objetos mínimos; não carregam FreeCAD, Open CASCADE ou SketchUp.
+O workflow `.github/workflows/ci.yml` executa build --check, testes Python e Ruby em pushes/PRs. Sua inclusão no pacote não significa que a execução no GitHub já ocorreu; confira o resultado depois de publicar.
 
-Para mudanças Ruby, rode `ruby -c yk_step_bridge.rb` e `ruby -c yk_step_bridge/main.rb` quando houver Ruby instalado. Mesmo assim, valide no SketchUp: a sintaxe não verifica disponibilidade ou comportamento das APIs.
+## Regressão com modelos privados
 
-Os testes de distribuição também conferem o conjunto/bytes do instalador, dimensões dos PNGs, links locais Markdown e fechamento/volume do exemplo sintético. Eles não simulam a barra nativa.
+Use os arquivos comerciais fora da raiz do repositório. Não os envie como exemplos. A ferramenta abaixo testa o mesmo motor de malha com um JSON de diagnóstico:
 
-## Validação nos aplicativos
+```sh
+python tools/treat_json.py /caminho/privado/entrada.json --output /caminho/privado/saida.json --mode visualization --treatment complete
+```
 
-Siga a matriz manual de CONTRIBUTING. Registre versão, arquivo de teste, modo, tolerância, contagem de peças, escala, cores e fechamento. Diferencie:
+Registre contagem de peças, tipos, operações aceitas/rejeitadas, volume e validação final no SketchUp. Testes com Open CASCADE em outro ambiente não comprovam a execução de Import.insert, MeshPart ou FreeCADCmd no Windows.
 
-- sintaxe verificada;
-- teste isolado passado;
-- conversão real no FreeCADCmd;
-- importação real no SketchUp.
+## Exemplos públicos
+
+Importe tetraedro_vermelho.json para conferir escala/cor básica. Use Tratar JSON existente com tetraedro_faixa_fina.json e tetraedros_em_contato.json para exercitar as novas correções. Compare Completo e Conservador no segundo. São geometrias sintéticas, não versões reduzidas de modelos comerciais.
 
 ## Alterar versão
 
-Atualize metadados do carregador e as referências de versão no menu, relatório, README, changelog e notas de Release. Gere o RBZ e atualize os links de download. Não mude o identificador do carregador apenas para renomear a apresentação.
-
-Código assinado futuramente precisará ser submetido novamente ao serviço oficial se seu conteúdo for alterado. Até lá, distribua como pacote sem assinatura.
-
-## Regressão da restauração — 0.4.2
-
-`ruby tests/test_cleanup.rb` carrega os métodos reais de limpeza/suavização com objetos mínimos da API. Força uma perda de fechamento e verifica que a malha restaurada recebe soft/smooth; também cobre limpeza bem-sucedida, arestas acentuadas, bordas abertas, materiais diferentes e falha de restauração. Não executa o kernel geométrico nem prova o comportamento de manifold? ou erase! no SketchUp. Para integração, use modelo próprio que acione a restauração e confira relatório, cores e sólido no aplicativo.
+Atualize carregador, interfaces/relatório/ajuda, motor, README, changelog e guias atuais; preserve notas históricas. Gere o RBZ antes dos testes de distribuição e atualize SHA256. Não mude identificadores de instalação/configuração apenas para mudar a apresentação. Não afirme homologação nos aplicativos sem execução real.

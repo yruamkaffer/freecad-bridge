@@ -11,7 +11,7 @@ def version():
     return match.group(1)
 
 def sources():
-    paths=[ROOT/'yk_step_bridge.rb']+[ROOT/'yk_step_bridge'/n for n in ('main.rb','convert.py','mesh_tools.py','metadata.py','LICENSE.txt','NOTICE.txt','AJUDA.txt')]
+    paths=[ROOT/'yk_step_bridge.rb']+[ROOT/'yk_step_bridge'/n for n in ('main.rb','convert.py','mesh_tools.py','metadata.py','cad_tools.py','conversion.py','LICENSE.txt','NOTICE.txt','AJUDA.txt')]
     for name in ('step','json','settings','diagnostics','about'):
         paths += [ROOT/'yk_step_bridge/icons'/f'{name}{suffix}' for suffix in ('.svg','_24.png','_32.png')]
     for p in paths:

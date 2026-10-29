@@ -2,6 +2,12 @@
 
 Prioridades propostas, sem compromisso de prazo.
 
+## Entregue na 0.5.0
+
+- União limitada de vértices e separação local de contatos.
+- Superfícies explícitas em Visualização e modo Sólidos disponíveis.
+- Tratamento de JSON, proveniência de cores e relatório de ajustes.
+
 ## Entregue na 0.4.2
 
 - Suavização preservada após restaurar a malha para manter o sólido.

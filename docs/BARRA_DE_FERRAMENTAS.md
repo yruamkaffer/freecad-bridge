@@ -26,7 +26,7 @@ Passe o mouse para ver a dica. Durante uma conversão externa, STEP e JSON ficam
 
 A versão 0.4.0 preserva o carregador e as configurações existentes. Reinicie o SketchUp após instalar; instalar sobre arquivos antigos não substitui o Ruby já carregado naquela sessão.
 
-Confira **Diagnóstico (0.4.3)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
+Confira **Diagnóstico (0.5.0)**. Se aparecer versão antiga, verifique duplicatas do carregador na pasta Plugins ou instalação de um RBZ anterior.
 
 ## Implementação e limites
 
@@ -34,6 +34,10 @@ Confira **Diagnóstico (0.4.3)**. Se aparecer versão antiga, verifique duplicat
 
 O empacotamento confere a presença dos dez PNGs e cinco SVGs. Não há nova dependência em tempo de execução. A interface real e a persistência de posição precisam ser verificadas no SketchUp; a checagem local não simula a janela do aplicativo.
 
-## Marca — 0.4.3
+## Marca — introduzida na 0.4.3
 
 STEP e Sobre usam a marca de ponte e seta. Veja [identidade visual](IDENTIDADE_VISUAL.md). Os outros comandos mantêm símbolos de função.
+
+## Tratar um JSON — 0.5.0
+
+O ícone JSON importa como está. O menu Tratar JSON existente… permite aplicar os tratamentos usando FreeCADCmd e escolher Estrito, Visualização ou Sólidos disponíveis. Esse comando não cria um sexto botão.

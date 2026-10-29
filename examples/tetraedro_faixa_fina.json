@@ -1,0 +1,80 @@
+{
+  "format": "yk-step-bridge-1",
+  "units": "mm",
+  "source": "exemplo_sintetico_tetraedro_faixa_fina",
+  "strict": true,
+  "warnings": [
+    "Exemplo sintetico: use Tratar JSON existente para testar o reparo."
+  ],
+  "parts": [
+    {
+      "name": "tetraedro_faixa_fina",
+      "vertices": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          10,
+          0,
+          0
+        ],
+        [
+          0,
+          10,
+          0
+        ],
+        [
+          0,
+          0,
+          10
+        ],
+        [
+          1e-05,
+          0,
+          0
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          2,
+          4
+        ],
+        [
+          4,
+          2,
+          1
+        ],
+        [
+          0,
+          4,
+          3
+        ],
+        [
+          4,
+          1,
+          3
+        ],
+        [
+          0,
+          3,
+          2
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "color": [
+        66,
+        211,
+        186
+      ],
+      "cad_valid": true,
+      "geometry_type": "solid"
+    }
+  ]
+}

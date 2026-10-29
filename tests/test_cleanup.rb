@@ -96,10 +96,26 @@ def test_invalid_restoration_stops_import
   raise 'Failed restoration must raise before import continues'
 end
 
+def test_closed_surface_is_not_reported_as_cad_solid
+  component = Group.new([], true, 'Closed shell')
+  status = YKStepBridge.part_status(component, {'geometry_type' => 'surface'})
+  assert(status.include?('SUPERFÍCIE'), 'Closed shell must stay classified as surface')
+end
+
+def test_invalid_cad_is_not_reported_as_approved_solid
+  component = Group.new([], true, 'Unapproved CAD')
+  assert(YKStepBridge.part_status(component, {'cad_valid' => false}) == 'VERIFICAR', 'Invalid CAD must be flagged')
+end
+
+def test_approved_solid_status
+  component = Group.new([], true, 'Approved solid')
+  assert(YKStepBridge.part_status(component, {'cad_valid' => true, 'mesh_closed' => true}) == 'SÓLIDO', 'Approved solid status')
+end
+
 tests = private_methods.grep(/^test_/).sort
 tests.each do |test|
   send(test)
   puts "PASS #{test}"
 end
-raise 'No tests executed' unless tests.size == 4
+raise 'No tests executed' unless tests.size == 7
 puts "#{tests.size} cleanup regression tests passed (API doubles, not SketchUp)."
